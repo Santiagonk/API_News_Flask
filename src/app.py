@@ -17,9 +17,10 @@ DB_NAME = os.getenv("DB_NAME")
 MONGO_URI = f'mongodb+srv://{USER}:{PASSWORD}@{DB_HOST}/{DB_NAME}?retryWrites=true'
 MONGO_DATABASE = f'{DB_NAME}'
 
-app = Flask(__name__)
-app.config["MONGO_URI"] = MONGO_URI
-mongo = PyMongo(app)
+
+@app.route('/', methods=['GET'])
+def main():
+    return "NEWS API FLASK"
 
 @app.route('/news', methods=['GET'])
 def get_news():
@@ -62,5 +63,8 @@ def get_tag(tag):
     response = json_util.dumps(new)
     return Response(response, mimetype="application/json")
 
-if __name__ == "__main__":
-    app.run(debug=True)
+def create_app():
+    app = Flask(__name__)
+    app.config["MONGO_URI"] = MONGO_URI
+    mongo = PyMongo(app)
+    return app
