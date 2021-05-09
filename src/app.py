@@ -23,14 +23,42 @@ mongo = PyMongo(app)
 
 @app.route('/news', methods=['GET'])
 def get_news():
-    print(request.form['tags'])
-    news = mongo.db.News.find()
+    query = {}
+    offset = 0
+    per_page = 10
+    try:
+        offset = int(request.args['offset'])
+    except:
+        pass
+    try:
+        per_page = int(request.args['per_page'])
+    except:
+        pass
+    news = mongo.db.News.find(query).skip(offset).limit(per_page)
     response = json_util.dumps(news)
     return Response(response, mimetype="application/json")
 
 @app.route('/news/<id>', methods=['GET'])
 def get_new(id):
     new = mongo.db.News.find_one({'_id': ObjectId(id), })
+    response = json_util.dumps(new)
+    return Response(response, mimetype="application/json")
+
+@app.route('/tag/<tag>', methods=['GET'])
+def get_tag(tag):
+    query = {}
+    offset = 0
+    per_page = 10
+    try:
+        offset = int(request.args['offset'])
+    except:
+        pass
+    try:
+        per_page = int(request.args['per_page'])
+    except:
+        pass
+    query['tag'] = { '$in' : [tag]}
+    new = mongo.db.News.find(query).skip(offset).limit(per_page)
     response = json_util.dumps(new)
     return Response(response, mimetype="application/json")
 
