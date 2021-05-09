@@ -19,9 +19,11 @@ MONGO_DATABASE = f'{DB_NAME}'
 
 def create_app():
     app = Flask(__name__)
-    app.config["MONGO_URI"] = MONGO_URI
-    mongo = PyMongo(app)
     return app
+
+app = create_app()
+app.config["MONGO_URI"] = MONGO_URI
+mongo = PyMongo(app)
 
 @app.route('/', methods=['GET'])
 def main():
@@ -68,4 +70,5 @@ def get_tag(tag):
     response = json_util.dumps(new)
     return Response(response, mimetype="application/json")
 
-app = create_app()
+if __name__ == '__main__':
+    app.run(debug=True)
