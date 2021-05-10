@@ -43,7 +43,7 @@ def get_all_news():
     try:
         per_page = int(request.args['per_page'])
     except:
-        pass    
+        pass
     news = mongo.db.News.find().skip(offset).limit(per_page)
     response = json_util.dumps(news)
     return Response(response, mimetype="application/json")
