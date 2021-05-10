@@ -31,7 +31,13 @@ mongo = PyMongo(app)
 def main():
     return "NEWS API FLASK"
 
-@app.route('/news', methods=['GET'])
+@app.route('/new', methods=['GET'])
+def get_news():    
+    news = mongo.db.News.find()
+    response = json_util.dumps(news)
+    return Response(response, mimetype="application/json")
+
+@app.route('/new', methods=['GET'])
 def get_news():
     query = {}
     offset = 0
@@ -48,7 +54,7 @@ def get_news():
     response = json_util.dumps(news)
     return Response(response, mimetype="application/json")
 
-@app.route('/news/<id>', methods=['GET'])
+@app.route('/new/<id>', methods=['GET'])
 def get_new(id):
     new = mongo.db.News.find_one({'_id': ObjectId(id), })
     response = json_util.dumps(new)
