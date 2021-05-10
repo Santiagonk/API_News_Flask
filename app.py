@@ -5,7 +5,7 @@ import os
 from bson import json_util
 from bson.objectid import ObjectId
 import json
-from config import config
+from decouple import config as config_decouple
 
 load_dotenv()
 
@@ -18,16 +18,11 @@ DB_NAME = os.getenv("DB_NAME")
 MONGO_URI = f'mongodb+srv://{USER}:{PASSWORD}@{DB_HOST}/{DB_NAME}?retryWrites=true'
 MONGO_DATABASE = f'{DB_NAME}'
 
-def create_app(enviroment):
-    app = Flask(__name__)
-    app.config.from_object(enviroment)
+def create_app():
+    app = Flask(__name__)    
     return app
 
-environment = config['development']
-if config_decouple('PRODUCTION', default=False):
-    enviroment = config['production']
-
-app = create_app(enviroment)
+app = create_app()
 
 app.config["MONGO_URI"] = MONGO_URI
 mongo = PyMongo(app)
