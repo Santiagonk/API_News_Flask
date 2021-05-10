@@ -31,8 +31,8 @@ mongo = PyMongo(app)
 def main():
     return "NEWS API FLASK"
 
-@app.route('/new', methods=['GET'])
-def get_news():    
+@app.route('/news', methods=['GET'])
+def get_all_news():    
     news = mongo.db.News.find()
     response = json_util.dumps(news)
     return Response(response, mimetype="application/json")
