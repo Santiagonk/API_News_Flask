@@ -32,8 +32,19 @@ def main():
     return "NEWS API FLASK"
 
 @app.route('/news', methods=['GET'])
-def get_all_news():    
-    news = mongo.db.News.find()
+def get_all_news():
+    query = {}
+    offset = 0
+    per_page = 400
+    try:
+        offset = int(request.args['offset'])
+    except:
+        pass
+    try:
+        per_page = int(request.args['per_page'])
+    except:
+        pass    
+    news = mongo.db.News.find().skip(offset).limit(per_page)
     response = json_util.dumps(news)
     return Response(response, mimetype="application/json")
 
